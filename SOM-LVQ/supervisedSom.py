@@ -36,8 +36,10 @@ class supervisedSom(object):
         bone()
         pcolor(self.som.distance_map().T)
         colorbar()
-        markers = ['v', 's', 'o', '4']
-        colors = ['r', 'g', 'b', 'y']
+        # markers = ['v', 's', 'o', '4']
+        # colors = ['r', 'g', 'b', 'y']
+        markers = ['1', '2', '3', '4', 's', '8', 'p', '>']
+        colors = ['r', 'g', 'b', 'y', 'w', 'c', 'm', 'k']
         for i, x in enumerate(self.x_train):
             w = self.som.winner(x)
             plot(w[0] + 0.5,

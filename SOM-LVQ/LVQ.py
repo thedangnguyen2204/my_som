@@ -191,11 +191,11 @@ class LVQ(object):
             
             self.epsilon = self.epsilon - self.epsilon_dec_factor
             
-            closest_pvector = self.find_closest(rnd_s, self.p_vectors)[1]
-            second_closest_pvector = self.find_runnerup(rnd_s, self.p_vectors)
-            compare_distance = np.linalg.norm(closest_pvector.p_vector - rnd_s)/np.linalg.norm(second_closest_pvector.p_vector - rnd_s)
+            closest_pvector = self.find_closest(rnd_s)[1]
+            second_closest_pvector = self.find_runnerup(rnd_s)
+            compare_distance = np.linalg.norm(closest_pvector.p_vector - rnd_s)-np.linalg.norm(second_closest_pvector.p_vector - rnd_s)*0.8
             
-            if target_y == second_closest_pvector.class_id and target_y != closest_pvector.class_id and compare_distance > 0.8 and compare_distance < 1.2:
+            if target_y == second_closest_pvector.class_id and target_y != closest_pvector.class_id and compare_distance > 0 and compare_distance < 1.2:
                 closest_pvector.update(rnd_s, False)
                 second_closest_pvector.update(rnd_s)
             elif target_y == closest_pvector.class_id:
@@ -204,7 +204,7 @@ class LVQ(object):
                 closest_pvector.update(rnd_s, False)
             closest_pvector.epsilon = self.epsilon
         return self.p_vectors
-
+    
     def win_map_LVQ(self, x):
         """
             Returns a dictionary wm where wm[(i,j)] is a list with all the patterns

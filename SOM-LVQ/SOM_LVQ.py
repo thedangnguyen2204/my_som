@@ -84,8 +84,8 @@ class SOM_LVQ(object):
         """
         proto_vectors = self.p_vectors
         closest = None
-        position = None
-        closest_distance = 99999
+        position = ()
+        closest_distance = 9999999
         for i in range(proto_vectors.shape[0]):
             for j in range(proto_vectors.shape[1]):
                 distance = np.linalg.norm(in_vector - proto_vectors[i][j].p_vector)
@@ -180,6 +180,35 @@ class SOM_LVQ(object):
             closest_pvector.epsilon = self.epsilon
         return self.p_vectors
 
+    def train_LVQ_neighbors(self, x, y):
+        while self.epsilon >= 0.01:
+            rnd_i = np.random.randint(0, len(x))
+            rnd_s = x[rnd_i]
+            target_y = y[rnd_i]
+            
+            self.epsilon = self.epsilon - self.epsilon_dec_factor
+            
+            index = self.find_closest(rnd_s)[0]
+            # if (index == ()): 
+            #     continue
+            selfx = self.p_vectors.shape[0]
+            selfy = self.p_vectors.shape[1]
+            update_p_vectors = []
+            x_down = -1 if (index[0] > 0) else 0
+            x_up = 1 if (index[0] < selfx-1) else 0
+            y_down = -1 if (index[1] > 0) else 0
+            y_up = 1 if (index[1] < selfy-1) else 0    
+            for dx in range(x_down, x_up + 1):
+                for dy in range(y_down, y_up + 1):
+                    update_p_vectors.append(self.p_vectors[index[0] + dx][index[1] + dy])
+                
+            for p in update_p_vectors:
+                if target_y == p.class_id:
+                    p.update(rnd_s)
+                else:
+                    p.update(rnd_s, False)
+                p.epsilon = self.epsilon
+        return self.p_vectors
     def win_map_LVQ(self, x):
         """
             Returns a dictionary wm where wm[(i,j)] is a list with all the patterns
