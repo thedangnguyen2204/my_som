@@ -1,5 +1,4 @@
 import numpy as np
-import supervisedSom
 from collections import defaultdict
 """
     Version 0: Minimalistic implementation of the Learning Vector Quantization (LVQ)

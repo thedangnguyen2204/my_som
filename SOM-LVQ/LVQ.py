@@ -60,6 +60,8 @@ class LVQ(object):
                 y_subset = np.where(y == i)
                 # select tuple for chosen class
                 x_subset = x[y_subset]
+                if len(x_subset) == 0:
+                    continue
                 # get R random indices between 0 and len(x_subset)
                 samples = np.random.randint(0, len(x_subset), n_neurons)
                 # select p_vectors, they are chosen randomly from the samples x

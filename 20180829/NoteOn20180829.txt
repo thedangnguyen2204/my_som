@@ -1,0 +1,13 @@
+Thử nghiệm ngày 20180829:
+
+Code lại LVQ, cho tập p_vectors có dạng mảng 10*10, trước nó chỉ là mảng 1 chiều, sau khi train sẽ gán lại mảng này cho tập neuron của SOM, tuy nhiên win_map đã bị thay đổi.
+
+Có 2 trường hợp xảy ra:
+
+1 là sử dụng win_map cũ với weight mới
+2 là xây dựng win_map mới với weight mới và lập lại mảng propa và mảng labels
+
+Trường hợp lớn khác là phải xây dựng cách vote mới
+
+Nhận xét:
+- Cách train bằng LVQ làm vấn đề overlapping bị nghiêm trọng, vì nó tự xác định phân bố nhãn trong khi phân bố này dựa vào SOM, SOM có thể đưa ra phân bố không thực sự chính xác. Dẫn đến LVQ thiên lệch (kiểm chứng lại điều này)

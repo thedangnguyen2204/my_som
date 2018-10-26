@@ -1,0 +1,5 @@
+Phát hiện ra mình validate sai khi mà có 2 file rocktype, mình tưởng rằng mình train trên 1 tập và test trên tập còn lại, tuy nhiên thì mình lại đang chỉ train và test trên cùng 1 tập.
+
+- Phương án: Cần thử trộn 2 bộ dữ liệu và train xem sao.
+
+Với dữ liệu Older People thì có 1 labels ít mẫu, nó luôn bị sai

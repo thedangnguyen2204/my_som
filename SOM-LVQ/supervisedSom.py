@@ -106,13 +106,14 @@ class supervisedSom(object):
         y = self.labels.shape[2]
         for i in range(x):
             for j in range(y):
-                if (sum(self.labels[k, i, j] for k in range(self.labels.shape[0])) == 0):
-                    continue
-                else:
-                    distance = np.linalg.norm(in_vector - self.som.weights[i][j])
-                    if distance < closest_distance:
-                        closest_distance = distance
-                        closest = (i, j)         
+                # Check dead neurons, if the BMU is a dead neuron then find another BMU
+                # if (sum(self.labels[k, i, j] for k in range(self.labels.shape[0])) == 0):
+                #     continue
+                # else:
+                distance = np.linalg.norm(in_vector - self.som.weights[i][j])
+                if distance < closest_distance:
+                    closest_distance = distance
+                    closest = (i, j)         
         return closest
 
     def predict(self, test_vector):

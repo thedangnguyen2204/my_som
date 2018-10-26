@@ -155,7 +155,7 @@ class LVQ(object):
             
             self.epsilon = self.epsilon - self.epsilon_dec_factor
             
-            closest_pvector = self.find_closest(rnd_s, self.p_vectors)
+            closest_pvector = self.find_closest(rnd_s, self.p_vectors)[1]
             second_closest_pvector = self.find_runnerup(rnd_s, self.p_vectors)
             compare_distance = np.linalg.norm(closest_pvector.p_vector - rnd_s)/np.linalg.norm(second_closest_pvector.p_vector - rnd_s)
             

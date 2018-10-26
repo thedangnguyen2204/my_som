@@ -1,0 +1,8 @@
+- Thử nghiệm với LVQ (find runner up, update 2 neurons): Độ chính xác tạm chấp nhận (khoảng 80-85%), không giải quyết được vấn đề overlapping, không có visualize
+- Thử nghiệm SOM-LVQ (train 1 SOM rồi dùng neuron của SOM để khởi tạo cho neurons của LVQ): Độ chính xác > 85%, không giải quyết được vấn đề overlapping, có visualize
+- Thử nghiệm SOM-LVQ bỏ đi các neurons chết, tỉ lệ chính xác cao hơn 85%, khá ổn định, train nhanh hơn, không giải quyết được vấn đề overlapping
+- Thử nghiệm SOM-LVQ (ensemble learning-chia dữ liệu làm 3 phần nhỏ rồi train độc lập): tỉ lệ chính xác cao hơn 85%, khá ổn định, train lâu hơn, không giải quyết được vấn đề overlapping
+- Thử nghiệm supervised SOM (không dùng LVQ nữa mà gắn nhãn trực tiếp cho neuron của SOM dựa vào tỉ lệ): tỉ lệ chính xác thấp, khoảng 80%, nếu tăng chiều dữ liệu lên thì khoảng 81, 82%
+- Thử nghiệm supervised SOM (chia nhỏ dữ liệu và dữ nguyên chiều): tỉ lệ chính xác cao hơn 85%, giải quyết được vấn đề overlapping
+- Thử nghiệm supervised SOM (không chia nhỏ dữ liệu và tăng chiều): tỉ lệ chính xác khoảng 90%, giải quyết được vấn đề overlapping, train lâu do tính toán nhiều
+- Thử nghiệm Hierarchical SOM: Overfit
