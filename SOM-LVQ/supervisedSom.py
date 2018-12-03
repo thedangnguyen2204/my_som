@@ -32,7 +32,6 @@ class supervisedSom(object):
         Parameters
         -------
         """
-        numLabels = len(np.unique(self.y_train))
         bone()
         pcolor(self.som.distance_map().T)
         colorbar()
@@ -49,12 +48,15 @@ class supervisedSom(object):
                 markerfacecolor = 'None',
                 markersize = 10,
                 markeredgewidth = 2)
+        show()
+    def labelSom(self):
+        numLabels = len(np.unique(self.y_train))
+        for i, x in enumerate(self.x_train):
+            w = self.som.winner(x)
             for nl in range(numLabels):
                 if self.y_train[i] == nl:
                     self.labels[nl, w[0], w[1]] += 1
-        show()
         return self.labels
-
     def propabilitySom(self):
         """
         Calculate propa np array
@@ -116,13 +118,41 @@ class supervisedSom(object):
                     closest = (i, j)         
         return closest
 
-    def predict(self, test_vector):
+    # def predict(self, test_vector):
+    #     """
+    #     Find the label
+
+    #     Parameters
+    #     -------
+    #     test_vector: the given vector
+    #     """
+    #     position = self.find_closest(test_vector)
+    #     return self.taggings[position[0], position[1]]
+    def predict(self, x):
         """
         Find the label
 
         Parameters
         -------
-        test_vector: the given vector
+        x: the array to be predicted
         """
-        position = self.find_closest(test_vector)
-        return self.taggings[position[0], position[1]]
+        result = []
+        for test_vector in x:
+            position = self.find_closest(test_vector)
+            result.append(self.taggings[position[0], position[1]])
+        return np.array(result)
+
+    def predict_proba(self, x):
+        """
+        Predict label's propability for a given input
+
+        Parameters
+        -------
+        test_vector: input vector
+        """
+        self.propabilitySom()
+        result = []
+        for test_vector in x:
+            position = self.find_closest(test_vector)
+            result.append(np.array([self.propa[i, position[0], position[1]] for i in range(len(self.propa))]))
+        return np.array(result)

@@ -126,6 +126,9 @@ class supervisedSom(BaseEstimator, ClassifierMixin):
 
         self.X_ = x
         self.y_ = y
+        # self.visualSom()
+        # self.propabilitySom()
+        # self.taggingSom()
     def predict(self, x):
         """
         Find the label

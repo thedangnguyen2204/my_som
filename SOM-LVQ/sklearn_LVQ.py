@@ -32,7 +32,7 @@ class prototype(object):
             self.p_vector = self.p_vector - self.epsilon * (u_vector - self.p_vector)
 
 class LVQ(BaseEstimator, ClassifierMixin):
-    def __init__(self, x, y, n_classes, n_neurons, p_vectors, epsilon=0.9, epsilon_dec_factor=0.001):
+    def __init__(self, x, y, n_classes, classes, n_neurons, p_vectors, epsilon=0.9, epsilon_dec_factor=0.001):
         """
         Initialize a LVQ network.
 
@@ -48,6 +48,7 @@ class LVQ(BaseEstimator, ClassifierMixin):
         """
         self.x = x
         self.y = y
+        self.classes = classes
         self.n_classes = n_classes
         self.n_neurons = n_neurons
         self.epsilon = epsilon
@@ -55,7 +56,8 @@ class LVQ(BaseEstimator, ClassifierMixin):
         self.p_vectors = p_vectors
         if(len(self.p_vectors) == 0):
             p_vectors = []
-            for i in range(n_classes):
+            # for i in range(n_classes):
+            for i in self.classes:
                 # select class i
                 y_subset = np.where(y == i)
                 # select tuple for chosen class
@@ -70,8 +72,8 @@ class LVQ(BaseEstimator, ClassifierMixin):
                     p = prototype(i, s, epsilon)
                     p_vectors.append(p)
         self.p_vectors = p_vectors
-        self.labels = np.zeros((len(np.unique(y)), len(self.p_vectors)))
-        self.propa = np.zeros((len(np.unique(y)), len(self.p_vectors)))
+        self.labels = np.zeros((self.n_classes, len(self.p_vectors)))
+        self.propa = np.zeros((self.n_classes, len(self.p_vectors)))
     def labelingLVQ(self):
         """
         Count the number of samples of each label for each neuron
@@ -162,6 +164,16 @@ class LVQ(BaseEstimator, ClassifierMixin):
         check_is_fitted(self, ['X_', 'y_', 'classes_'])
         x = check_array(x)
         return np.array([self.find_closest(test_vector)[1].class_id for test_vector in x])
+    def predict_proba(self, x):
+        """
+        Predict label's propability for a given input
+
+        Parameters
+        -------
+        test_vector: input vector
+        """
+        self.propabilityLVQ()
+        return np.array([ np.array([self.propa[i, self.find_closest(test_vector)[0]] for i in range(len(self.propa))]) for test_vector in x])
     def fit(self, x, y):
         """
         Perform iteration to adjust the prototype vector 

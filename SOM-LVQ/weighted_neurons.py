@@ -29,12 +29,14 @@ def bagging(x_train, y_train, x_test, sample_size, n_clfs):
 def bagging_predict(predictions, n_row, n_clfs):
     return [np.bincount([predictions[j][i] for j in range(n_clfs)]).argmax() for i in range(n_row)]
 
-def weighted_neurons_predict(models, mappings, propa, y):
+# This function used for SOM and SOM_LVQ because their sets of neurons have topology structure, 
+# the propa array is 3D array
+def weighted_neurons_predict(models, mappings, propa, x):
     n_models = len(models)
     pos = [] # array to store postion of BMUs
     l = [] # array to store the number of samples in each neurons
     for i in range(n_models):
-        tmp_pos = models[i].find_closest(y)[0] # find_closest function return [position, closest]
+        tmp_pos = models[i].find_closest(x)[0] # find_closest function return [position, closest]
         pos.append(tmp_pos)
         tmp_l = len(mappings[i][tmp_pos])
         l.append(tmp_l)
@@ -44,6 +46,25 @@ def weighted_neurons_predict(models, mappings, propa, y):
         tmp_propa = 0
         for j in range(n_models):
             tmp_propa += weights[j] * propa[j][i][pos[j][0]][pos[j][1]]
+        soft_predict.append(tmp_propa)
+    return np.argmax(np.array(soft_predict))
+    
+# This function used for LVQ, the propa array is 2D array
+def weighted_neurons_predict_LVQ(models, mappings, propa, x):
+    n_models = len(models)
+    pos = [] # array to store postion of BMUs
+    l = [] # array to store the number of samples in each neurons
+    for i in range(n_models):
+        tmp_pos = models[i].find_closest(x)[0] # find_closest function return [position, closest]
+        pos.append(tmp_pos)
+        tmp_l = len(mappings[i][tmp_pos])
+        l.append(tmp_l)
+    soft_predict = []
+    weights = [i/np.sum(l) for i in l] # li / (l1 + l2 + ...)
+    for i in range(propa[0].shape[0]):
+        tmp_propa = 0
+        for j in range(n_models):
+            tmp_propa += weights[j] * propa[j][i][pos[j]]
         soft_predict.append(tmp_propa)
     return np.argmax(np.array(soft_predict))
     

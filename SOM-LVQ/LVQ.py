@@ -151,6 +151,16 @@ class LVQ(object):
         test_vector: input vector
         """
         return self.find_closest(test_vector)[1].class_id
+    def predict_proba(self, test_vector):
+        """
+        Predict label's propability for a given input
+
+        Parameters
+        -------
+        test_vector: input vector
+        """
+        self.propabilityLVQ()
+        return np.array([self.propa[i, self.find_closest(test_vector)[0]] for i in range(len(self.propa))])
     def fit(self, x, y):
         """
         Perform iteration to adjust the prototype vector 
